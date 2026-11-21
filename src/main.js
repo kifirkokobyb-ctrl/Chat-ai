@@ -74,7 +74,8 @@ function safeModelPath(path) {
   return clean;
 }
 function localModelUrl(path) {
-  return new URL(`/model-files/${path.split("/").map(encodeURIComponent).join("/")}`, location.origin).href;
+  const clean = path.split("/").map(encodeURIComponent).join("/");
+  return new URL(`${import.meta.env.BASE_URL}model-files/${clean}`, location.origin).href;
 }
 async function getCache() {
   return await caches.open(MODEL_CACHE);
@@ -160,7 +161,7 @@ async function downloadModel() {
     const configFile = files.find(f => f.path.endsWith("mlc-chat-config.json"));
     const tokenizerFile = files.find(f => f.path.endsWith("tokenizer.json"));
     if (!configFile || !tokenizerFile) {
-      throw new Error("В Bucket не найдены mlc-chat-config.json и/или tokenizer.json. Возможно, файлы лежат во вложенной папке или это не WebLLM-совместимая сборка.");
+      throw new Error("В Bucket не найдены mlc-chat-config.json и/или tokenizer.json. Возможно, файлы лежат во вложенной папке или это не WebLLM-модель.");
     }
     // Keep relative directory structure. If config is in a nested folder, use that folder as model root.
     const rootPrefix = configFile.path.slice(0, configFile.path.lastIndexOf("/") + 1);
