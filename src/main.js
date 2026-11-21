@@ -238,17 +238,20 @@ async function downloadModel() {
 async function loadModel() {
   if (engine) return;
   loadBtn.disabled = true;
-  try {
-    if (!navigator.gpu) throw new Error("В этом браузере WebGPU недоступен. Нужен совместимый Android-телефон и актуальный Chrome.");
-    if (!await isAlreadyDownloaded()) throw new Error("Сначала скачай модель кнопкой «Скачать SmolLM2».");
-    model: localModelUrl(rootPrefix),
-model_id: MODEL_ID,
-model_lib: localModelUrl("__model_lib__.wasm"),
-      appConfig: {
-        model_list: [{
-          model: "/model-files/",
-          model_id: MODEL_ID,
-          model_lib: "/model-files/__model_lib__.wasm",
+  engine = await CreateMLCEngine(MODEL_ID, {
+  appConfig: {
+    model_list: [{
+      model: localModelUrl(rootPrefix),
+      model_id: MODEL_ID,
+      model_lib: localModelUrl("__model_lib__.wasm"),
+      vram_required_MB: 872,
+      low_resource_required: true,
+      required_features: ["shader-f16"],
+      overrides: { context_window_size: 4096 }
+    }]
+  },
+  initProgressCallback: p => setStatus(p.text || "Подготовка модели…", "working")
+});
           vram_required_MB: 872,
           low_resource_required: true,
           required_features: ["shader-f16"],
