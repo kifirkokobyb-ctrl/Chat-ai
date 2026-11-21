@@ -47,7 +47,6 @@ function setDownloadProgress(done, total, fileName) {
   detailEl.textContent = `${fileName} · ${formatBytes(done)} / ${formatBytes(total)}`;
 }
 function addMessage(role, content = "") {
-  document.querySelector(".welcome")?.remove();
   const item = document.createElement("article");
   item.className = `message ${role}`;
   const avatar = document.createElement("div");
