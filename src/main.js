@@ -241,9 +241,9 @@ async function loadModel() {
   try {
     if (!navigator.gpu) throw new Error("В этом браузере WebGPU недоступен. Нужен совместимый Android-телефон и актуальный Chrome.");
     if (!await isAlreadyDownloaded()) throw new Error("Сначала скачай модель кнопкой «Скачать SmolLM2».");
-    const rootPrefix = localStorage.getItem("smollm_model_root") || "";
-    setStatus("Запускаю модель…", "working");
-    engine = await CreateMLCEngine(MODEL_ID, {
+    model: localModelUrl(rootPrefix),
+model_id: MODEL_ID,
+model_lib: localModelUrl("__model_lib__.wasm"),
       appConfig: {
         model_list: [{
           model: "/model-files/",
